@@ -291,8 +291,8 @@ GET http(s)://ip:port/message/emptyMessageList
 **入参说明**
 
 | 字段 | 类型 | 必填 | 含义 |
-| :--- |----| ---- | ---- |
-|      |    |      |      |
+| :--- | ---- | ---- | ---- |
+|      |      |      |      |
 
 **出参：**
 
@@ -379,7 +379,7 @@ POST http(s)://ip:port/privacy/userInfo
 
 ### 1.5 安全模块
 
-#### 1.5.1 判断旧密码是否正确 （是否与修改密码写在一个接口中）
+#### 1.5.1 发送验证码
 
 **请求地址：**
 
@@ -389,15 +389,17 @@ POST http(s)://ip:port/safety/oldPasswordValidity
 
 **入参说明**
 
-| 字段 | 类型 | 必填 | 含义 |
-| :--- | ---- | ---- | ---- |
-|      |      |      |      |
+| 字段  | 类型 | 必填 | 含义   |
+| :---- | ---- | ---- | ------ |
+| phone | Long | 是   | 手机号 |
 
 **出参：**
 
 ```json
 {
-    
+    data:{
+        verificationCode:"验证码"
+    }
 }
 ```
 
@@ -411,10 +413,11 @@ POST http(s)://ip:port/safety/updatePassword
 
 **入参说明**
 
-| 字段        | 类型   | 必填 | 含义   |
-| :---------- | ------ | ---- | ------ |
-| oldPassword | String | 是   | 旧密码 |
-| newPassword | String | 是   | 新密码 |
+| 字段             | 类型   | 必填 | 含义   |
+| :--------------- | ------ | ---- | ------ |
+| oldPassword      | String | 是   | 旧密码 |
+| newPassword      | String | 是   | 新密码 |
+| verificationCode | String | 是   | 验证码 |
 
 **出参：**
 
@@ -544,15 +547,26 @@ POST http(s)://ip:port/medicalRecord/getList
 
 **入参说明**
 
-| 字段 | 类型 | 必填 | 含义 |
-| :--- | ---- | ---- | ---- |
-|      |      |      |      |
+| 字段     | 类型    | 必填 | 含义     |
+| :------- | ------- | ---- | -------- |
+| pageNum  | Integer | 是   | 当前页   |
+| pageSize | Integer | 是   | 每页条数 |
 
 **出参：**
 
 ```json
 {
-    
+    data:[
+        {
+            createTime:2022-1-1 15:03:23, // 创建时间
+            doctorName:"问诊医生名",
+            purposeVisit:"诊断原因",
+            recordId:"记录id"
+        },{}
+    ],
+    pageNum:1,
+    pageSize:10,
+    total:21
 }
 ```
 
@@ -566,19 +580,22 @@ POST http(s)://ip:port/medicalRecord/insertRecord
 
 **入参说明**
 
-| 字段 | 类型 | 必填 | 含义 |
-| :--- | ---- | ---- | ---- |
-|      |      |      |      |
+| 字段         | 类型   | 必填 | 含义       |
+| :----------- | ------ | ---- | ---------- |
+| doctorName   | String | 是   | 问诊医生名 |
+| visitDate    | Date   | 是   | 访问时间   |
+| attendPlace  | String | 否   | 参与地点   |
+| purposeVisit | String | 是   | 问诊原因   |
 
 **出参：**
 
 ```json
 {
-    
+    data:null
 }
 ```
 
-#### 1.7.3 修改今天的心情和记录
+#### 1.7.3 修改某次就诊记录
 
 **请求地址：**
 
@@ -588,15 +605,19 @@ POST http(s)://ip:port/medicalRecord/updateRecord
 
 **入参说明**
 
-| 字段 | 类型 | 必填 | 含义 |
-| :--- | ---- | ---- | ---- |
-|      |      |      |      |
+| 字段         | 类型   | 必填 | 含义       |
+| :----------- | ------ | ---- | ---------- |
+| id           | String | 是   | 记录id     |
+| doctorName   | String | 是   | 问诊医生名 |
+| visitDate    | Date   | 是   | 访问时间   |
+| attendPlace  | String | 否   | 参与地点   |
+| purposeVisit | String | 是   | 问诊原因   |
 
 **出参：**
 
 ```json
 {
-    
+    data:null
 }
 ```
 
@@ -610,15 +631,21 @@ GET http(s)://ip:port/medicalRecord/getRecordById/{id}
 
 **入参说明**
 
-| 字段 | 类型 | 必填 | 含义 |
-| :--- | ---- | ---- | ---- |
-|      |      |      |      |
+| 字段 | 类型 | 必填 | 含义   |
+| :--- | ---- | ---- | ------ |
+| id   | Long | 是   | 记录id |
 
 **出参：**
 
 ```json
 {
-    
+    data:{
+        id:13131313131313， //id
+        doctorName:"问诊医生名",
+        visitDate:2022-1-3 13:36:33, // 访问时间
+        attendPlace:"参与地点",
+        purposeVisit:"问诊原因"
+    }
 }
 ```
 
@@ -629,20 +656,20 @@ GET http(s)://ip:port/medicalRecord/getRecordById/{id}
 **请求地址：**
 
 ```http
-POST http(s)://ip:port/medicalRecord/deleterRecord
+POST http(s)://ip:port/medicalRecord/deleterRecord/{id}
 ```
 
 **入参说明**
 
-| 字段 | 类型 | 必填 | 含义 |
-| :--- | ---- | ---- | ---- |
-|      |      |      |      |
+| 字段 | 类型 | 必填 | 含义   |
+| :--- | ---- | ---- | ------ |
+| id   | Long | 是   | 记录id |
 
 **出参：**
 
 ```json
 {
-    
+    data:null
 }
 ```
 
@@ -658,15 +685,31 @@ POST http(s)://ip:port/hospitalizations/getList
 
 **入参说明**
 
-| 字段 | 类型 | 必填 | 含义 |
-| :--- | ---- | ---- | ---- |
-|      |      |      |      |
+| 字段     | 类型    | 必填 | 含义     |
+| :------- | ------- | ---- | -------- |
+| pageNum  | Integer | 是   | 当前页   |
+| pageSize | Integer | 是   | 每页条数 |
 
 **出参：**
 
 ```json
 {
-    
+    data:[
+        {
+            HospitalizationStartTime:2019-5-16, // 住院起始时间
+            HospitalizationEndTime:2020-1-1, // 住院结束时间
+            reasonList:[
+                {
+                    content:"住院原因",
+                    id:13131313113, // 原因id(可以是疾病或者病症)
+                }
+            ],
+            recordId:19187328648738 // 记录id
+        }
+    ],
+    pageNum:1,
+    pageSize:10,
+    total:21
 }
 ```
 
@@ -684,15 +727,18 @@ POST http(s)://ip:port/hospitalizations/insertRecord
 
 **入参说明**
 
-| 字段 | 类型 | 必填 | 含义 |
-| :--- | ---- | ---- | ---- |
-|      |      |      |      |
+| 字段                  | 类型         | 必填 | 含义                       |
+| :-------------------- | ------------ | ---- | -------------------------- |
+| hospitalizationReason | List<String> | 是   | 住院原因                   |
+| hospitalizedStartTime | Date         | 是   | 入院时间                   |
+| ifLeaveHospital       | Integer      | 是   | 是否出院                   |
+| leaveHospitalTime     | Date         | 否   | 如果已经出院，填写出院时间 |
 
 **出参：**
 
 ```json
 {
-    
+    data:null
 }
 ```
 
@@ -706,15 +752,19 @@ POST http(s)://ip:port/hospitalizations/updateRecord
 
 **入参说明**
 
-| 字段 | 类型 | 必填 | 含义 |
-| :--- | ---- | ---- | ---- |
-|      |      |      |      |
+| 字段                  | 类型         | 必填 | 含义                       |
+| :-------------------- | ------------ | ---- | -------------------------- |
+| id                    | Long         | 是   | 记录id                     |
+| hospitalizationReason | List<String> | 是   | 住院原因                   |
+| hospitalizedStartTime | Date         | 是   | 入院时间                   |
+| ifLeaveHospital       | Integer      | 是   | 是否出院                   |
+| leaveHospitalTime     | Date         | 否   | 如果已经出院，填写出院时间 |
 
 **出参：**
 
 ```json
 {
-    
+    data:null
 }
 ```
 
@@ -728,15 +778,26 @@ GET http(s)://ip:port/hospitalizations/getRecordById/{id}
 
 **入参说明**
 
-| 字段 | 类型 | 必填 | 含义 |
-| :--- | ---- | ---- | ---- |
-|      |      |      |      |
+| 字段 | 类型 | 必填 | 含义   |
+| :--- | ---- | ---- | ------ |
+| id   | Long | 是   | 记录id |
 
 **出参：**
 
 ```json
 {
-    
+    data:{
+        id:131313131313, // id
+        reasonList:[
+                {
+                    content:"住院原因",
+                    id:13131313113, // 原因id(可以是疾病或者病症)
+                }
+            ],
+        hospitalizedStartTime:2019-1-1, // 入院时间
+        ifLeaveHospital:1, // 是否出院
+        leaveHospitalTime:2021-1-1, //如果已经出院，填写出院时间
+    }
 }
 ```
 
@@ -747,20 +808,20 @@ GET http(s)://ip:port/hospitalizations/getRecordById/{id}
 **请求地址：**
 
 ```http
-POST http(s)://ip:port/hospitalizations/deleterRecord
+POST http(s)://ip:port/hospitalizations/deleterRecord/{id}
 ```
 
 **入参说明**
 
-| 字段 | 类型 | 必填 | 含义 |
-| :--- | ---- | ---- | ---- |
-|      |      |      |      |
+| 字段 | 类型 | 必填 | 含义   |
+| :--- | ---- | ---- | ------ |
+| id   | Long | 是   | 记录id |
 
 **出参：**
 
 ```json
 {
-    
+	data:null
 }
 ```
 
@@ -774,15 +835,16 @@ POST http(s)://ip:port/hospitalizations/deleterReason
 
 **入参说明**
 
-| 字段 | 类型 | 必填 | 含义 |
-| :--- | ---- | ---- | ---- |
-|      |      |      |      |
+| 字段     | 类型 | 必填 | 含义   |
+| :------- | ---- | ---- | ------ |
+| recordId | Long | 是   | 记录id |
+| reasonId | Long | 是   | 原因id |
 
 **出参：**
 
 ```json
 {
-    
+    data:null
 }
 ```
 
@@ -798,15 +860,22 @@ POST http(s)://ip:port/myConditions/getList
 
 **入参说明**
 
-| 字段 | 类型 | 必填 | 含义 |
-| :--- | ---- | ---- | ---- |
-|      |      |      |      |
+| 字段     | 类型    | 必填 | 含义     |
+| :------- | ------- | ---- | -------- |
+| pageNum  | Integer | 是   | 当前页   |
+| pageSize | Integer | 是   | 每页条数 |
 
 **出参：**
 
 ```json
 {
-    
+    data:[
+        {
+            conditionName:"疾病名",
+            conditionId:131313131, // 疾病id
+            ifMonitoring:1 // 是否监控这个疾病
+        }
+    ]
 }
 ```
 
@@ -824,15 +893,25 @@ POST http(s)://ip:port/myConditions/insertCondition
 
 **入参说明**
 
-| 字段 | 类型 | 必填 | 含义 |
-| :--- | ---- | ---- | ---- |
-|      |      |      |      |
+| 字段                      | 类型         | 必填             | 含义                     |
+| :------------------------ | ------------ | ---------------- | ------------------------ |
+| conditionName             | String       | 是               | 疾病名                   |
+| ifConfirmed               | Integer      | 否               | 是否确诊                 |
+| confirmedTime             | Date         | 是（确诊则必填） | 如果确诊则填入确诊日期   |
+| correspondingSymptomsList | List<Object> | 否               | 疾病对应的症状和严重程度 |
+
+correspondingSymptomsList中的参数
+
+| 字段        | 类型    | 必填 | 含义     |
+| :---------- | ------- | ---- | -------- |
+| symptomName | String  | 是   | 症状名   |
+| severity    | Integer | 否   | 严重程度 |
 
 **出参：**
 
 ```json
 {
-    
+    data:null
 }
 ```
 
@@ -846,15 +925,25 @@ POST http(s)://ip:port/myConditions/updateCondition
 
 **入参说明**
 
-| 字段 | 类型 | 必填 | 含义 |
-| :--- | ---- | ---- | ---- |
-|      |      |      |      |
+| 字段                      | 类型         | 必填             | 含义                     |
+| :------------------------ | ------------ | ---------------- | ------------------------ |
+| conditionName             | String       | 是               | 疾病名                   |
+| ifConfirmed               | Integer      | 否               | 是否确诊                 |
+| confirmedTime             | Date         | 是（确诊则必填） | 如果确诊则填入确诊日期   |
+| correspondingSymptomsList | List<Object> | 否               | 疾病对应的症状和严重程度 |
+
+correspondingSymptomsList中的参数
+
+| 字段        | 类型    | 必填 | 含义     |
+| :---------- | ------- | ---- | -------- |
+| symptomName | String  | 是   | 症状名   |
+| severity    | Integer | 否   | 严重程度 |
 
 **出参：**
 
 ```json
 {
-    
+    data:null
 }
 ```
 
@@ -868,15 +957,25 @@ GET http(s)://ip:port/myConditions/getMyConditionById/{id}
 
 **入参说明**
 
-| 字段 | 类型 | 必填 | 含义 |
-| :--- | ---- | ---- | ---- |
-|      |      |      |      |
+| 字段 | 类型 | 必填 | 含义   |
+| :--- | ---- | ---- | ------ |
+| id   | Long | 是   | 记录id |
 
 **出参：**
 
 ```json
 {
-    
+    id:1313133564444, // id
+    conditionName:"疾病名",
+    ifConfirmed:1, // 是否确诊
+    confirmedTime:2021-1-1, // 确诊日期
+    correspondingSymptomsList:[
+        {
+            correspondingId:13131313131, // 疾病下病症的id
+            symptomName:"症状名",
+            severity:2 // 严重程度
+        }
+    ]
 }
 ```
 
@@ -892,37 +991,38 @@ GET http(s)://ip:port/myConditions/deleterMyConditionById/{id}
 
 **入参说明**
 
-| 字段 | 类型 | 必填 | 含义 |
-| :--- | ---- | ---- | ---- |
-|      |      |      |      |
+| 字段 | 类型 | 必填 | 含义       |
+| :--- | ---- | ---- | ---------- |
+| id   | Long | 是   | 疾病记录id |
 
 **出参：**
 
 ```json
 {
-    
+    data:null
 }
 ```
 
-#### 1.9.6 标识这个疾病已解决
+#### 1.9.6 标识这个疾病是否解决
 
 **请求地址：**
 
 ```http
-GET http(s)://ip:port/myConditions/resolvedCondition/{}
+POST http(s)://ip:port/myConditions/resolvedCondition
 ```
 
 **入参说明**
 
-| 字段 | 类型 | 必填 | 含义 |
-| :--- | ---- | ---- | ---- |
-|      |      |      |      |
+| 字段    | 类型    | 必填 | 含义               |
+| :------ | ------- | ---- | ------------------ |
+| id      | Long    | 是   | 记录id             |
+| ifSolve | Integer | 是   | 是否已治疗这个疾病 |
 
 **出参：**
 
 ```json
 {
-    
+    data:null
 }
 ```
 
@@ -936,15 +1036,16 @@ POST http(s)://ip:port/myConditions/monitoringCondition
 
 **入参说明**
 
-| 字段 | 类型 | 必填 | 含义 |
-| :--- | ---- | ---- | ---- |
-|      |      |      |      |
+| 字段         | 类型    | 必填 | 含义         |
+| :----------- | ------- | ---- | ------------ |
+| id           | Long    | 是   | 记录id       |
+| ifMonitoring | Integer | 是   | 是否监控这个 |
 
 **出参：**
 
 ```json
 {
-    
+    data:null
 }
 ```
 
@@ -958,15 +1059,17 @@ POST http(s)://ip:port/myConditions/replenishMyConditionInfo
 
 **入参说明**
 
-| 字段 | 类型 | 必填 | 含义 |
-| :--- | ---- | ---- | ---- |
-|      |      |      |      |
+| 字段         | 类型    | 必填 | 含义                 |
+| :----------- | ------- | ---- | -------------------- |
+| ifAppearTime | Integer | 是   | 是否知道症状出现时间 |
+| appearTime   | Date    | 否   | 症状出现时间         |
+| finishTime   | Date    | 否   | 症状结束时间         |
 
 **出参：**
 
 ```json
 {
-    
+    data:null
 }
 ```
 
@@ -982,15 +1085,25 @@ POST http(s)://ip:port/mySymptoms/getList
 
 **入参说明**
 
-| 字段 | 类型 | 必填 | 含义 |
-| :--- | ---- | ---- | ---- |
-|      |      |      |      |
+| 字段     | 类型    | 必填 | 含义     |
+| :------- | ------- | ---- | -------- |
+| pageNum  | Integer | 是   | 当前页   |
+| pageSize | Integer | 是   | 每页条数 |
 
 **出参：**
 
 ```json
 {
-    
+    data:[
+        {
+            symptomName:"症状名",
+            id:16592335662, // 记录id
+            symptomId:16565656565, // 症状id
+            diseases:"相关疾病名",
+            condition:16565645454545, // 相关疾病id
+            symptomState:1 // 症状状态(1.正在跟踪中，2.之前跟踪)
+        }
+    ]
 }
 ```
 
@@ -1004,15 +1117,25 @@ POST http(s)://ip:port/mySymptoms/getSymptoms
 
 **入参说明**
 
-| 字段 | 类型 | 必填 | 含义 |
-| :--- | ---- | ---- | ---- |
-|      |      |      |      |
+| 字段        | 类型   | 必填 | 含义   |
+| :---------- | ------ | ---- | ------ |
+| symptomName | String | 是   | 症状名 |
 
 **出参：**
 
 ```json
 {
-    
+    data:[
+        {
+            symptomId:165656548454, // 症状id
+            symtomName:"症状名",
+            population:332 // 使用人数
+        },{
+            symptomId:1484595944, // 症状id
+            symtomName:"症状名",
+            population:665 // 使用人数
+        },{}
+    ]
 }
 ```
 
@@ -1028,15 +1151,16 @@ POST http(s)://ip:port/mySymptoms/insertSymptom
 
 **入参说明**
 
-| 字段 | 类型 | 必填 | 含义 |
-| :--- | ---- | ---- | ---- |
-|      |      |      |      |
+| 字段       | 类型   | 必填 | 含义   |
+| :--------- | ------ | ---- | ------ |
+| symptomId  | Long   | 是   | 症状id |
+| symtomName | String | 是   | 症状名 |
 
 **出参：**
 
 ```json
 {
-    
+    data:null
 }
 ```
 
@@ -1050,19 +1174,20 @@ POST http(s)://ip:port/mySymptoms/recordHistory
 
 **入参说明**
 
-| 字段 | 类型 | 必填 | 含义 |
-| :--- | ---- | ---- | ---- |
-|      |      |      |      |
+| 字段       | 类型    | 必填 | 含义     |
+| :--------- | ------- | ---- | -------- |
+| recordDate | Date    | 是   | 记录时间 |
+| severity   | Integer | 是   | 严重程度 |
 
 **出参：**
 
 ```json
 {
-    
+    data:null
 }
 ```
 
-#### 1.10.5 删除这个病状史
+#### 1.10.5 删除这个症状
 
 **请求地址：**
 
@@ -1072,15 +1197,15 @@ GET http(s)://ip:port/mySymptoms/deleteMySymptoms/{id}
 
 **入参说明**
 
-| 字段 | 类型 | 必填 | 含义 |
-| :--- | ---- | ---- | ---- |
-|      |      |      |      |
+| 字段 | 类型 | 必填 | 含义   |
+| :--- | ---- | ---- | ------ |
+| id   | Long | 是   | 记录id |
 
 **出参：**
 
 ```json
 {
-    
+    data:null
 }
 ```
 
@@ -1091,20 +1216,21 @@ GET http(s)://ip:port/mySymptoms/deleteMySymptoms/{id}
 **请求地址：**
 
 ```http
-POST http(s)://ip:port/mySymptoms/stopTrace
+POST http(s)://ip:port/mySymptoms/traceSymptom
 ```
 
 **入参说明**
 
-| 字段 | 类型 | 必填 | 含义 |
-| :--- | ---- | ---- | ---- |
-|      |      |      |      |
+| 字段        | 类型    | 必填 | 含义             |
+| :---------- | ------- | ---- | ---------------- |
+| ifTrace     | Integer | 是   | 是否追踪这个症状 |
+| mySymptomId | Integer | 是   | 我的症状id       |
 
 **出参：**
 
 ```json
 {
-    
+    data:null
 }
 ```
 
@@ -1120,15 +1246,36 @@ POST http(s)://ip:port/myTreatments/getList
 
 **入参说明**
 
-| 字段 | 类型 | 必填 | 含义 |
-| :--- | ---- | ---- | ---- |
-|      |      |      |      |
+| 字段     | 类型    | 必填 | 含义     |
+| :------- | ------- | ---- | -------- |
+| pageNum  | Integer | 是   | 当前页   |
+| pageSize | Integer | 是   | 每页条数 |
 
 **出参：**
 
 ```json
 {
-    
+    data:[
+        {
+            treatmentName:"治疗方法名",
+            id:135646464, // 记录id
+            treatmentId:13565656464, // 治疗方法id
+            treatmentType:1, // 治疗方法类型1.处方药,2.补充维生素类，3.生活方式 ...
+            dosage:"200mg", // 根据治疗方法类型决定单位
+            purposeList:[
+                {
+                    purposeId:132323645, //疾病或症状id
+                    purposeType:1, // 1.疾病，2.症状
+                    purposeName:"疾病或症状名"
+                },{
+                    purposeId:136565656, //疾病或症状id
+                    purposeType:2, // 1.疾病，2.症状
+                    purposeName:"疾病或症状名"
+                },{}
+            ],
+            ifStopped:1 // 是否停止治疗
+        }
+    ]
 }
 ```
 
@@ -1137,20 +1284,26 @@ POST http(s)://ip:port/myTreatments/getList
 **请求地址：**
 
 ```http
-POST http(s)://ip:port/myTreatments/getSymptoms
+POST http(s)://ip:port/myTreatments/getTreatments
 ```
 
 **入参说明**
 
-| 字段 | 类型 | 必填 | 含义 |
-| :--- | ---- | ---- | ---- |
-|      |      |      |      |
+| 字段          | 类型   | 必填 | 含义       |
+| :------------ | ------ | ---- | ---------- |
+| treatmentName | String | 是   | 治疗方法名 |
 
 **出参：**
 
 ```json
 {
-    
+    data:[
+        {
+            treatmentName:"治疗方法名",
+            treatmentId:16565645454, // 治疗方法id
+            population:659 //使用人数
+        }
+    ]
 }
 ```
 
@@ -1166,15 +1319,32 @@ POST http(s)://ip:port/myTreatments/insertTreatment
 
 **入参说明**
 
-| 字段 | 类型 | 必填 | 含义 |
-| :--- | ---- | ---- | ---- |
-|      |      |      |      |
+| 字段          | 类型         | 必填                     | 含义                 |
+| :------------ | ------------ | ------------------------ | -------------------- |
+| treatmentName | String       | 是                       | 治疗方法名           |
+| treatmentId   | Long         | 是                       | 治疗方法id           |
+| purposeList   | List<Object> | 是                       | 目的                 |
+| ifStopped     | Integer      | 是                       | 是否已停止此治疗方式 |
+| startDate     | Date         | 是                       | 开始时间             |
+| endDate       | Date         | 是（如果已停止，则必填） | 结束时间             |
+| stopReason    | String       | 否                       | 停止原因             |
+| dosage        | String       | 是                       | 剂量                 |
+| unit          | String       | 是                       | 单位                 |
+| frequency     | String       | 是                       | 频率                 |
+
+purposeList中的参数
+
+| 字段        | 类型    | 必填 | 含义                          |
+| :---------- | ------- | ---- | ----------------------------- |
+| purposeId   | Long    | 是   | 疾病或症状id                  |
+| purposeName | String  | 是   | 疾病或症状名                  |
+| purposeType | Integer | 是   | 治疗的目的类型 1.疾病，2.症状 |
 
 **出参：**
 
 ```json
 {
-    
+    data:null
 }
 ```
 
@@ -1188,15 +1358,21 @@ POST http(s)://ip:port/myTreatments/replenishUsage
 
 **入参说明**
 
-| 字段 | 类型 | 必填 | 含义 |
-| :--- | ---- | ---- | ---- |
-|      |      |      |      |
+| 字段                 | 类型    | 必填 | 含义                                                |
+| :------------------- | ------- | ---- | --------------------------------------------------- |
+| treatmentName        | String  | 是   | 治疗方法名                                          |
+| treatmentId          | Long    | 是   | 治疗方法id                                          |
+| treatmentType        | Integer | 是   | 治疗方法类型1.处方药,2.补充维生素类，3.生活方式 ... |
+| presentDoseStartDate | Date    | 否   | 开始使用当前剂量的时间                              |
+| presentDose          | String  | 是   | 当前剂量                                            |
+| presentDoseUnit      | String  | 是   | 当前剂量单位                                        |
+| presentFrequency     | String  | 是   | 当前频率                                            |
 
 **出参：**
 
 ```json
 {
-    
+    data:null
 }
 ```
 
@@ -1210,63 +1386,117 @@ POST http(s)://ip:port/myTreatments/evaluatemyTreatment
 
 **入参说明**
 
-| 字段 | 类型 | 必填 | 含义 |
-| :--- | ---- | ---- | ---- |
-|      |      |      |      |
+| 字段          | 类型    | 必填 | 含义                                       |
+| :------------ | ------- | ---- | ------------------------------------------ |
+| id            | Long    | 是   | 我的治疗方法记录id                         |
+| purposeId     | Long    | 是   | 疾病或症状id                               |
+| purposeName   | String  | 是   | 疾病或症状名                               |
+| purposeType   | Integer | 是   | 疾病或症状类型                             |
+| efficacy      | Integer | 是   | 1.没有效果，2.轻微有效，3.有效，4.非常有效 |
+| sideEffect    | Integer | 是   | 副作用 1.无，2.小，3.大，4.很大            |
+| dependence    | Integer | 是   | 依赖性 1.无，2.小，3.大，4.很大            |
+| burden        | Integer | 是   | 负担 1.无，2.小，3.大，4.很大              |
+| affordability | Integer | 否   | 可购性 1.无，2.小，3.大，4.很大            |
+| advice        | String  | 否   | 建议或提示                                 |
+| personalNote  | String  | 否   | 个人日志                                   |
 
 **出参：**
 
 ```json
 {
-    
+    data:null
 }
 ```
 
 #### 
 
-#### 1.11.6 查看评价的内容
+#### 1.11.6 停止这种治疗
 
 **请求地址：**
 
 ```http
-POST http(s)://ip:port/myTreatments/getTreatmentById
+POST http(s)://ip:port/myTreatments/stopTreatment/{id}
 ```
 
 **入参说明**
 
-| 字段 | 类型 | 必填 | 含义 |
-| :--- | ---- | ---- | ---- |
-|      |      |      |      |
+| 字段 | 类型 | 必填 | 含义   |
+| :--- | ---- | ---- | ------ |
+| id   | Long | 是   | 记录id |
 
 **出参：**
 
 ```json
 {
-    
+    data:null
 }
 ```
 
-#### 1.11.7 修改上一次评价
+#### 1.11.7 删除治疗方式
 
 **请求地址：**
 
 ```http
-POST http(s)://ip:port/myTreatments/updateTreatment
+POST http(s)://ip:port/myTreatments/deleteTreatment/{id}
 ```
 
 **入参说明**
 
-| 字段 | 类型 | 必填 | 含义 |
-| :--- | ---- | ---- | ---- |
-|      |      |      |      |
+| 字段 | 类型 | 必填 | 含义   |
+| :--- | ---- | ---- | ------ |
+| id   | Long | 是   | 记录id |
 
 **出参：**
 
 ```json
 {
-    
+    data:null
 }
 ```
+
+#### 1.11.8 查看历史编辑记录
+
+**请求地址：**
+
+```http
+POST http(s)://ip:port/myTreatments/getHistoryEdit
+```
+
+**入参说明**
+
+| 字段 | 类型 | 必填 | 含义   |
+| :--- | ---- | ---- | ------ |
+| id   | Long | 是   | 记录id |
+
+**出参：**
+
+```json
+{
+    data:{
+        effect:[ // 效果
+            {
+                recordDate:2021-10-12, // 记录时间
+                impact:2 // 1.无，2.小，3.适中，4.大，5.很大
+            },{
+                recordDate:2021-11-12, // 记录时间
+                impact:2 // 1.无，2.小，3.适中，4.大，5.很大
+            }
+        ],
+        sideEffect:[ // 副作用
+            {
+                recordDate:2021-10-12, // 记录时间
+                impact:2 // 1.无，2.小，3.适中，4.大，5.很大
+            },{
+                recordDate:2021-11-12, // 记录时间
+                impact:2 // 1.无，2.小，3.适中，4.大，5.很大
+            }
+        ],
+        individualEvaluations:"个人评价"
+    }
+}
+```
+
+### 
 
 ### 1.12 我的动态
 
@@ -1280,15 +1510,34 @@ POST http(s)://ip:port/dynamic/getList
 
 **入参说明**
 
-| 字段 | 类型 | 必填 | 含义 |
-| :--- | ---- | ---- | ---- |
-|      |      |      |      |
+| 字段     | 类型    | 必填 | 含义     |
+| :------- | ------- | ---- | -------- |
+| pageNum  | Integer | 是   | 当前页   |
+| pageSize | Integer | 是   | 每页条数 |
 
 **出参：**
 
 ```json
 {
-    
+    data:[
+        {
+            user:{
+                username:"用户名",
+                userImageUrl:"用户头像",
+                age:12, // 年龄
+                conditionsName:"疾病名",
+                symptomsName:"症状名",
+                lastActiveTime:2022-1-13 // 最近活动的时间
+            },
+            dynamic:{
+                title:"标题",
+                type:"类型",
+                id:13123232323, // 动态的id
+                action:"动作：更新了、修改了、添加等"
+                content:"内容"
+            }
+        }
+    ]
 }
 ```
 
@@ -1302,15 +1551,16 @@ POST http(s)://ip:port/dynamic/announceDynamic
 
 **入参说明**
 
-| 字段 | 类型 | 必填 | 含义 |
-| :--- | ---- | ---- | ---- |
-|      |      |      |      |
+| 字段    | 类型   | 必填 | 含义 |
+| :------ | ------ | ---- | ---- |
+| title   | String | 是   | 标题 |
+| content | String | 是   | 内容 |
 
 **出参：**
 
 ```json
 {
-    
+    data:null
 }
 ```
 
@@ -1324,15 +1574,16 @@ POST http(s)://ip:port/dynamic/dynamicStatus
 
 **入参说明**
 
-| 字段 | 类型 | 必填 | 含义 |
-| :--- | ---- | ---- | ---- |
-|      |      |      |      |
+| 字段    | 类型    | 必填 | 含义 |
+| :------ | ------- | ---- | ---- |
+| like    | Integer | 否   | 点赞 |
+| collect | Integer | 否   | 收藏 |
 
 **出参：**
 
 ```json
 {
-    
+    data:null
 }
 ```
 
@@ -1346,15 +1597,17 @@ POST http(s)://ip:port/dynamic/replyDynamic
 
 **入参说明**
 
-| 字段 | 类型 | 必填 | 含义 |
-| :--- | ---- | ---- | ---- |
-|      |      |      |      |
+| 字段        | 类型   | 必填 | 含义     |
+| :---------- | ------ | ---- | -------- |
+| phePosterId | Long   | 是   | 发帖人id |
+| dynamicId   | Long   | 是   | 动态id   |
+| content     | String | 是   | 回复内容 |
 
 **出参：**
 
 ```json
 {
-    
+    data:null
 }
 ```
 
@@ -1368,15 +1621,15 @@ GET http(s)://ip:port/dynamic/deleteDynamic/{id}
 
 **入参说明**
 
-| 字段 | 类型 | 必填 | 含义 |
-| :--- | ---- | ---- | ---- |
-|      |      |      |      |
+| 字段 | 类型 | 必填 | 含义       |
+| :--- | ---- | ---- | ---------- |
+| id   | Long | 是   | 动态记录id |
 
 **出参：**
 
 ```json
 {
-    
+    data:null
 }
 ```
 
@@ -1387,20 +1640,21 @@ GET http(s)://ip:port/dynamic/deleteDynamic/{id}
 **请求地址：**
 
 ```http
-GET http(s)://ip:port/dynamic/shieldDynamic/{id}
+POST http(s)://ip:port/dynamic/shieldDynamic
 ```
 
 **入参说明**
 
-| 字段 | 类型 | 必填 | 含义 |
-| :--- | ---- | ---- | ---- |
-|      |      |      |      |
+| 字段        | 类型    | 必填 | 含义                           |
+| :---------- | ------- | ---- | ------------------------------ |
+| id          | Long    | 是   | 动态id                         |
+| shieldState | Integer | 是   | 屏蔽状态（0.屏蔽，1.取消屏蔽） |
 
 **出参：**
 
 ```json
 {
-    
+    data:null
 }
 ```
 
